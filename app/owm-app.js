@@ -20,10 +20,19 @@ angular.module('OWMApp', ['ngRoute'])
         	template: '<p> Error - Page Not Found </p>'
         }).otherwise('/error');
     }])
-    .run(['$rootScope', '$location', function($rootScope, $location) {
+    .run(['$rootScope', '$location', '$timeout', function($rootScope, $location, $timeout) {
 			$rootScope.$on('$routeChangeError', function() {
 				$location.path('/error');
 			});
+            $rootScope.$on('$routeChangeStart', function(){
+                $rootScope.isLoading = true;
+            });
+             $rootScope.$on('$routeChangeSuccess', function(){
+                $timeout(function(){
+                    $rootScope.isLoading = false;
+                }, 1000);
+                
+            });
 	}])
     .controller('HomeCtrl', function($scope) {
         //empty for now
